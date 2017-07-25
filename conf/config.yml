@@ -31,7 +31,7 @@ logger:
     -
       type: time
       options:
-        filename: ../var/deepstream
+        filename: /var/lib/deepstream
 
 # Plugin Configuration
 plugins:

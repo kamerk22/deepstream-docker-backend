@@ -15,6 +15,8 @@ RUN deepstream install storage rethinkdb && \
     deepstream install msg redis
 
 
+# ADD ./conf /etc/deepstream/
+
 # Expose Port 
 EXPOSE 6020
 EXPOSE 6021
