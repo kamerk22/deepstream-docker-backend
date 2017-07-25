@@ -14,8 +14,10 @@ RUN deepstream install storage rethinkdb && \
     deepstream install cache redis && \
     deepstream install msg redis
 
+WORKDIR /etc/deepstream
 
-# ADD ./conf /etc/deepstream/
+ RUN rm config.yml permissions.yml users.yml
+ ADD ./conf ./
 
 # Expose Port 
 EXPOSE 6020
