@@ -1,29 +1,23 @@
 # Pull base image.
-FROM mhart/alpine-node:4
+FROM centos:7
 
-# Install build tools to compile native npm modules
-RUN apk add --update build-base python
+MAINTAINER Kashyap Merai | kashyapk62@gmail.com
+RUN yum clean all
+RUN yum install -y wget
 
-# Create app directory
-RUN mkdir -p /usr/local/deepstream/conf
-WORKDIR /usr/local/deepstream
+RUN wget https://bintray.com/deepstreamio/rpm/rpm -O /etc/yum.repos.d/bintray-deepstreamio-rpm.repo
 
-# Install deepstream as an application dependency
-RUN npm install deepstream.io deepstream.io-logger-winston --production
+RUN yum install -y deepstream.io-2.3.2-1
 
-# Link to volumes
-VOLUME [ "/usr/local/deepstream/conf", "/usr/local/deepstream/var" ]
+# Installing Plugins
+RUN deepstream install storage rethinkdb && \
+    deepstream install cache redis && \
+    deepstream install msg redis
 
-# Copy default config files
-RUN cp -r /usr/local/deepstream/node_modules/deepstream.io/conf/* /usr/local/deepstream/conf
+
+# Expose Port 
+EXPOSE 6020
+EXPOSE 6021
 
 # Define default command.
-CMD [ "node", "node_modules/.bin/deepstream" ]
-
-# Expose ports
-
-# HTTP Port
-EXPOSE 6020
-
-# TCP Port
-EXPOSE 6021
+CMD [ "deepstream" ]
